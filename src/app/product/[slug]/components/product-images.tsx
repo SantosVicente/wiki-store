@@ -31,7 +31,7 @@ const ProductImages = ({ name, imageUrls }: ProductImagesProps) => {
         />
       </div>
 
-      <div className="mt-8 grid grid-cols-4 gap-4 px-10">
+      <div className="mt-6 grid grid-cols-4 gap-6 px-5">
         {imageUrls.map((imageUrl, index) => (
           <div
             key={index}
