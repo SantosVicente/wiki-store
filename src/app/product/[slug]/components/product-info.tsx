@@ -12,22 +12,20 @@ import {
   ShoppingCartIcon,
   TruckIcon,
 } from "lucide-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import Truck from "../assets/Truck.svg";
 import Image from "next/image";
+import { CartContext } from "@/providers/cart";
 
 interface ProductInfoProps {
-  product: Pick<
-    ProductWithTotalPrice,
-    "description" | "basePrice" | "discountPercentage" | "totalPrice" | "name"
-  >;
+  product: ProductWithTotalPrice;
 }
 
-const ProductInfo = ({
-  product: { name, basePrice, discountPercentage, description, totalPrice },
-}: ProductInfoProps) => {
+const ProductInfo = ({ product }: ProductInfoProps) => {
   const [quantity, setQuantity] = useState(1);
+
+  const { addProductToCart } = useContext(CartContext);
 
   const handleDecreaseQuantity = () => {
     setQuantity((prevQuantity) =>
@@ -39,24 +37,30 @@ const ProductInfo = ({
     setQuantity((prevQuantity) => prevQuantity + 1);
   };
 
+  const handleAddProductToCartClick = () => {
+    addProductToCart({ ...product, quantity });
+  };
+
   return (
     <div className="flex flex-col gap-5 px-5">
       <div>
-        <h2 className="text-lg">{name}</h2>
+        <h2 className="text-lg">{product.name}</h2>
         {/*colocar avaliação dos clientes aqui e falando se o produto está disponível ou não no estoque */}
         <div className="flex items-center gap-2">
-          <h1 className="text-lg font-bold">R$ {totalPrice.toFixed(2)}</h1>
-          {discountPercentage > 0 && (
+          <h1 className="text-lg font-bold">
+            R$ {product.totalPrice.toFixed(2)}
+          </h1>
+          {product.discountPercentage > 0 && (
             <Badge className="rounded-2xl px-2 py-[2px]">
-              <ArrowDownIcon size={14} /> {discountPercentage}%
+              <ArrowDownIcon size={14} /> {product.discountPercentage}%
             </Badge>
           )}
         </div>
-        {discountPercentage > 0 && (
+        {product.discountPercentage > 0 && (
           <p className="text-sm opacity-60">
             De:{" "}
             <span className="line-through">
-              R$ {Number(basePrice).toFixed(2)}
+              R$ {Number(product.basePrice).toFixed(2)}
             </span>
           </p>
         )}
@@ -76,10 +80,13 @@ const ProductInfo = ({
 
       <div className="mt-3 flex flex-col gap-2">
         <h3 className="font-bold">Descrição</h3>
-        <p className="text-justify text-sm opacity-60">{description}</p>
+        <p className="text-justify text-sm opacity-60">{product.description}</p>
       </div>
 
-      <Button className="h-12 gap-1 rounded-xl uppercase">
+      <Button
+        className="h-12 gap-1 rounded-xl uppercase"
+        onClick={handleAddProductToCartClick}
+      >
         <ShoppingCartIcon size={16} />
         <p className="font-bold">Adicionar ao Carrinho</p>
       </Button>
