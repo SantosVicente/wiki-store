@@ -135,7 +135,7 @@ const Header = () => {
             <ShoppingCartIcon />
           </Button>
         </SheetTrigger>
-        <SheetContent>
+        <SheetContent className="flex flex-col gap-8">
           <Cart />
         </SheetContent>
       </Sheet>

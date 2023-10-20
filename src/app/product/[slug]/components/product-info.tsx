@@ -3,14 +3,12 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ProductWithTotalPrice } from "@/helpers/products";
-import { Product } from "@prisma/client";
 import {
   ArrowDownIcon,
   ArrowLeftIcon,
   ArrowRightIcon,
-  LucideTruck,
+  CheckCircle,
   ShoppingCartIcon,
-  TruckIcon,
 } from "lucide-react";
 import { useContext, useState } from "react";
 
@@ -24,6 +22,7 @@ interface ProductInfoProps {
 
 const ProductInfo = ({ product }: ProductInfoProps) => {
   const [quantity, setQuantity] = useState(1);
+  const [alterButton, setAlterButton] = useState(false);
 
   const { addProductToCart } = useContext(CartContext);
 
@@ -39,6 +38,8 @@ const ProductInfo = ({ product }: ProductInfoProps) => {
 
   const handleAddProductToCartClick = () => {
     addProductToCart({ ...product, quantity });
+
+    setAlterButton(true);
   };
 
   return (
@@ -83,13 +84,20 @@ const ProductInfo = ({ product }: ProductInfoProps) => {
         <p className="text-justify text-sm opacity-60">{product.description}</p>
       </div>
 
-      <Button
-        className="h-12 gap-1 rounded-xl uppercase"
-        onClick={handleAddProductToCartClick}
-      >
-        <ShoppingCartIcon size={16} />
-        <p className="font-bold">Adicionar ao Carrinho</p>
-      </Button>
+      {!alterButton ? (
+        <Button
+          className="h-12 gap-1 rounded-xl uppercase"
+          onClick={handleAddProductToCartClick}
+        >
+          <ShoppingCartIcon size={16} />
+          <p className="font-bold">Adicionar ao Carrinho</p>
+        </Button>
+      ) : (
+        <Button className="h-12 gap-1 rounded-xl bg-emerald-500 uppercase text-zinc-800 hover:bg-emerald-500">
+          <CheckCircle size={16} />
+          <p className="font-bold">Produto Adicionado</p>
+        </Button>
+      )}
 
       <div className="flex items-center justify-between rounded-lg bg-accent px-8 py-5">
         <div className="flex gap-2">
