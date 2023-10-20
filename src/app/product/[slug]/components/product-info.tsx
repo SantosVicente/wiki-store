@@ -10,7 +10,7 @@ import {
   CheckCircle,
   ShoppingCartIcon,
 } from "lucide-react";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import Truck from "../assets/Truck.svg";
 import Image from "next/image";
@@ -41,6 +41,14 @@ const ProductInfo = ({ product }: ProductInfoProps) => {
 
     setAlterButton(true);
   };
+
+  useEffect(() => {
+    if (alterButton) {
+      setTimeout(() => {
+        setAlterButton(false);
+      }, 7000);
+    }
+  }, [alterButton]);
 
   return (
     <div className="flex flex-col gap-5 px-5">
