@@ -8,9 +8,21 @@ import { computeProductTotalPrice } from "@/helpers/products";
 import { Separator } from "./separator";
 import { ScrollArea } from "./scroll-area";
 import { Button } from "./button";
+import { createCheckout } from "@/actions/checkout";
+import { loadStripe } from "@stripe/stripe-js";
 
 const Cart = () => {
   const { products, subtotal, total, totalDiscount } = useContext(CartContext);
+
+  const handleFinishPurchaseClick = async () => {
+    const checkout = await createCheckout(products);
+
+    const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
+
+    stripe?.redirectToCheckout({
+      sessionId: checkout.id,
+    });
+  };
 
   return (
     <>
@@ -70,7 +82,10 @@ const Cart = () => {
             <p>R$ {total.toFixed(2)}</p>
           </div>
 
-          <Button className="h-12 gap-1 rounded-xl uppercase">
+          <Button
+            className="h-12 gap-1 rounded-xl uppercase"
+            onClick={handleFinishPurchaseClick}
+          >
             <CircleDollarSign size={16} />
             <p className="font-bold">Finalizar Compra</p>
           </Button>
