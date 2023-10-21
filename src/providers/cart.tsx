@@ -38,7 +38,13 @@ const initialCartValues: ICartContext = {
 export const CartContext = createContext<ICartContext>(initialCartValues);
 
 const CartProvider = ({ children }: { children: ReactNode }) => {
-  const [products, setProducts] = useState<CartProduct[]>([]);
+  const [products, setProducts] = useState<CartProduct[]>(
+    JSON.parse(localStorage.getItem("@wiki-store/cart-products") || "[]"),
+  );
+
+  useEffect(() => {
+    localStorage.setItem("@wiki-store/cart-products", JSON.stringify(products));
+  }, [products]);
 
   const subtotal = useMemo(() => {
     return products.reduce((acc, product) => {
