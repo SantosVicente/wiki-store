@@ -43,7 +43,7 @@ const Header = () => {
             <MenuIcon />
           </Button>
         </SheetTrigger>
-        <SheetContent side="left">
+        <SheetContent side="left" className="w-[350px]">
           <SheetHeader className="text-left text-lg font-semibold">
             Menu
           </SheetHeader>
@@ -135,7 +135,7 @@ const Header = () => {
             <ShoppingCartIcon />
           </Button>
         </SheetTrigger>
-        <SheetContent className="flex flex-col gap-8">
+        <SheetContent className="flex w-[350px] flex-col gap-8">
           <Cart />
         </SheetContent>
       </Sheet>
