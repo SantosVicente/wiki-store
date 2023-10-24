@@ -6,7 +6,18 @@ import { getServerSession } from "next-auth";
 import OrderItem from "./components/order-item";
 
 const OrderPage = async () => {
-  const { orders, user } = await getServerSideProps();
+  const user = getServerSession(authOptions);
+
+  const orders = user
+    ? await prismaClient.order.findMany({
+        where: {
+          userId: (user as any).id,
+        },
+        include: {
+          orderProducts: true,
+        },
+      })
+    : null;
 
   return (
     <div className="p-5">
@@ -31,26 +42,6 @@ const OrderPage = async () => {
       )}
     </div>
   );
-};
-
-const getServerSideProps = async () => {
-  const user = getServerSession(authOptions);
-
-  const orders = user
-    ? await prismaClient.order.findMany({
-        where: {
-          userId: (user as any).id,
-        },
-        include: {
-          orderProducts: true,
-        },
-      })
-    : null;
-
-  return {
-    orders,
-    user,
-  };
 };
 
 export default OrderPage;
