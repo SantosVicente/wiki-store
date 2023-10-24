@@ -19,7 +19,7 @@ const OrderProductItem = ({ orderProduct }: OrderProductItemProps) => {
         className="
           flex
           h-[77px]
-          w-[77px]
+          w-[100px]
           items-center
           justify-center
           rounded-lg
